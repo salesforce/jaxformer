@@ -1,0 +1,48 @@
+{
+    "debug_mock_data": true,
+    "debug_emulate_tpu_on_cpu": false,
+    "debug_run_local": true,
+
+    "tpu_user": "erik.nijkamp",
+    "tpu_version": 3,
+    "tpu_size": 8,
+    "tpu_spawn": false,
+    "tpu_reserved": false,
+    "tpu_name": "sfr-{tpu_user}-tpu-v{tpu_version}-{tpu_size}-{tpu_zone}-1",
+    "tpu_zone": "us-east1-d",
+    "tpu_worker_port": 10000,
+    "tpu_internal_ips": false,
+       
+    "model_type": "decoder",
+    "model_sharding": "inter",
+    "model_layers": 2,
+    "model_dim": 16,
+    "model_head_dim": 16,
+    "model_heads": 8,
+    "model_vocab_size": 128,
+    "model_pe_rotary_dims": 8,
+    "model_seq_len": 2048,
+
+    "opt_warmup_steps": 3000,
+    "opt_anneal_steps": 300000,
+    "opt_total_steps": 350000,
+    "opt_lr_max": 3.0e-4,
+    "opt_lr_end": 3.0e-5,
+    "opt_weight_decay": 0.1,
+    "opt_clip_by_global_norm": 1.0,
+    "opt_gradient_accumulation_steps": 8,
+    "opt_per_replica_batch": 1,
+    "opt_params_partitions": 1,
+
+    "data_train_set": "gs://sfr-tpu-us-east1-research/enijkamp/jaxformer/datasets/thepile/train/*.tfrecords",
+
+    "ckpt_dir": "gs://sfr-tpu-us-east1-research/enijkamp/jaxformer/checkpoints/debug_tpu_v3_128",
+    "ckpt_every": 10000,
+    "ckpt_attempt": 0,
+
+    "wandb_enabled": false,
+    "wandb_project": "jaxformer",
+    "wandb_entity": "enijkamp",
+    "wandb_group": "debug",
+    "wandb_name": "debug_tpu_v3_8"
+}

@@ -1,0 +1,8 @@
+--find-links https://storage.googleapis.com/jax-releases/libtpu_releases.html
+tensorflow==2.7.0
+jax[tpu]==0.3.16
+optax==0.1.3
+dm-haiku==0.0.7
+einops==0.3.2
+google-cloud-storage==1.42.3
+smart_open[gcs]==5.2.1
