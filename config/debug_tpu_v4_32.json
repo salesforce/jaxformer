@@ -6,7 +6,7 @@
     "tpu_user": "erik.nijkamp",
     "tpu_version": 4,
     "tpu_image": "v2-alpha-tpuv4",
-    "tpu_size": 128,
+    "tpu_size": 32,
     "tpu_delete": true,
     "tpu_spawn": true,
     "tpu_reserved": false,
