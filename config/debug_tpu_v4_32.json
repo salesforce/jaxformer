@@ -39,7 +39,7 @@
 
     "data_train_set": "gs://sfr-tpu-us-east1-research/enijkamp/jaxformer/datasets/thepile/train/*.tfrecords",
 
-    "ckpt_dir": "gs://sfr-tpu-us-east1-research/enijkamp/jaxformer/checkpoints/debug_tpu_v4_128",
+    "ckpt_dir": "gs://sfr-tpu-us-east1-research/enijkamp/jaxformer/checkpoints/debug_tpu_v4_32",
     "ckpt_every": 10000,
     "ckpt_attempt": 0,
     
@@ -47,5 +47,5 @@
     "wandb_project": "jaxformer",
     "wandb_entity": "enijkamp",
     "wandb_group": "debug",
-    "wandb_name": "debug_tpu_v4_128"
+    "wandb_name": "debug_tpu_v4_32"
 }
