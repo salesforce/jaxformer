@@ -15,6 +15,6 @@ setup(
     'transformers',
   ],
   install_requires=[
-    'tensorflow-cpu==2.5.0'
+    'tensorflow-cpu==2.7.2'
   ],
 )
