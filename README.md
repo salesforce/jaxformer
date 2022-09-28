@@ -19,6 +19,8 @@ Please cite:
 }
 ```
 
+Acknowledgments: Ben Wang, James Bradbury, Zak Stone, Bo Pang.
+
 ## Setup
 
 ### Mode 1: CPU local
@@ -99,7 +101,7 @@ pip install -r requirements.txt
 
 python3 -m jaxformer.train --config config/codegen_350M_nl.json
 
-gcloud alpha compute tpus tpu-vm ssh sfr-erik.nijkamp-tpu-v3-64-us-east1-d-1 --zone us-east1-d --internal-ip --worker=0
+gcloud compute tpus tpu-vm ssh sfr-erik.nijkamp-tpu-v3-64-us-east1-d-1 --zone us-east1-d --internal-ip --worker=0
 ```
 
 ### Mode 4: A100 fine-tune (DeepSpeed)

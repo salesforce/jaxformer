@@ -5,6 +5,7 @@
 
     "tpu_user": "erik.nijkamp",
     "tpu_version": 3,
+    "tpu_image": "v2-alpha",
     "tpu_size": 8,
     "tpu_spawn": false,
     "tpu_reserved": false,
