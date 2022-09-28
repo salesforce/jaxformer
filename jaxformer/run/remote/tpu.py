@@ -18,7 +18,7 @@ def spawn_tpu_workers(tpu_user, tpu_spawn, tpu_create_env, tpu_name, tpu_tags, t
     tpu_internal_ip_arg = '--internal-ip' if tpu_internal_ips else ''
     tpu_internal_ips_arg = '--internal-ips' if tpu_internal_ips else ''
     tpu_network_arg = f'--network={tpu_network}' if tpu_network else ''
-    tpu_subnetwork_arg = f'--network={tpu_subnetwork}' if tpu_subnetwork else ''
+    tpu_subnetwork_arg = f'--subnetwork={tpu_subnetwork}' if tpu_subnetwork else ''
     tpu_tags_arg = f'--tags={tpu_tags}' if tpu_tags else ''
 
     if tpu_spawn:
