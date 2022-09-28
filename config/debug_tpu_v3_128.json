@@ -29,7 +29,7 @@
     "opt_warmup_steps": 3000,
     "opt_anneal_steps": 300000,
     "opt_total_steps": 350000,
-    "opt_lr": 3.0e-4,
+    "opt_lr_max": 3.0e-4,
     "opt_end_lr": 3.0e-5,
     "opt_weight_decay": 0.1,
     "opt_clip_by_global_norm": 1.0,
