@@ -79,6 +79,22 @@ class RemoteMaster:
         return int(return_steps[0]), return_loss.mean(), return_lr[0], return_grad[0]
 
 
+    @func_set_timeout(600)
+    def profile(self, data):
+        data_chunks = np.array_split(data, len(self.worker_sockets), axis=1)
+
+        for s, d in zip(self.worker_sockets, data_chunks):
+            socket_write(s, FN_PROFILE_CALL, {'x': d[:, :, :-1], 'y': d[:, :, 1:]})
+
+        workers_return = [socket_read(s)[1] for s in self.worker_sockets]
+
+        return_steps = np.array([worker_return[0] for worker_return in workers_return])
+
+        assert np.all(return_steps == return_steps[0]), return_steps
+
+        return int(return_steps[0])
+
+
     @func_set_timeout(2000)
     def save(self, step, path, wandb_run_id, data_files, data_file, data_batch):
 

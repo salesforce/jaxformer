@@ -31,6 +31,11 @@ class LocalMaster:
             return step, loss, lr, grad_global_norm
 
 
+    def profile(self, data):
+        with jax.experimental.maps.Mesh(self.devices, ('dp', 'pt', 'mp')):
+            return self.model.profile({'x': data[:, :, :-1], 'y': data[:, :, 1:]})
+
+
     def save(self, step, path, wandb_run_id, data_files, data_file, data_batch):
         pass
 

@@ -175,3 +175,58 @@ def train(config):
             if step > 0 and step % config['ckpt_every'] == 0 or step == int(config['opt_total_steps']):
                 with print_time(f'Saving checkpoint at step {step}'):
                     ckpt_step = master.save(step=step, path=f'{ckpt_dir}/{step}', wandb_run_id=wandb_run_id, data_files=train_files, data_file=data_file, data_batch=data_batch)
+
+
+
+def profile(config):
+
+    with print_time(f'Check configuration'):
+        config = set_default_config(config)
+
+        tpu_size_logical = config['tpu_size_logical']
+        tpu_cores = config['tpu_cores']
+
+        opt_gradient_accumulation_steps = config['opt_gradient_accumulation_steps']
+        opt_per_replica_batch = config['opt_per_replica_batch']
+
+        model_vocab_size = config['model_vocab_size']
+        model_seq_len = config['model_seq_len']
+
+
+    with print_time(f'Creating master'):
+        master = create_master(config)
+
+
+    if config['debug_mock_data']:
+
+        with print_time('Mocking dataset iterator'):
+            print(f'Total tokens per step = {opt_gradient_accumulation_steps * opt_per_replica_batch * (tpu_size_logical // tpu_cores) * model_seq_len}')
+            batch_size = (opt_gradient_accumulation_steps, opt_per_replica_batch * tpu_size_logical // tpu_cores)
+            loader_train_iter = create_mock_iter(model_vocab_size, batch_size, model_seq_len)
+            train_files = ['file']
+
+    else:
+
+        with print_time('Loading dataset iterator'):
+            print(f'Total tokens per step = {opt_gradient_accumulation_steps * opt_per_replica_batch * (tpu_size_logical // tpu_cores) * model_seq_len}')
+            batch_size = (opt_gradient_accumulation_steps, opt_per_replica_batch * tpu_size_logical // tpu_cores)
+
+            train_files = list_files(config['data_train_set'])
+            random.shuffle(train_files)
+            test_data_iterator(train_files, model_seq_len)
+            loader_train_iter = create_resumable_iter(train_files, batch_size, model_seq_len, resume_at_file=None, resume_at_batch=None)
+
+            print(train_files)
+
+
+    with print_time('Loading first batch'):
+        (data, data_file, data_batch) = next(loader_train_iter)
+        assert data.shape == (batch_size[0], batch_size[1], model_seq_len)
+
+
+    with print_time('Compile train function'):
+        step = master.train(data)[0]
+
+
+    with print_time('Profile train function'):
+        step = master.profile(data)

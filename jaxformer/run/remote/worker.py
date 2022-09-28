@@ -57,6 +57,12 @@ def main(args):
                     print(f'{step} FN_TRAIN_RET')
                     socket_write(s, FN_TRAIN_RET, [step, loss, float(lr_schedule(step)), grad_global_norm])
 
+                elif fn == FN_PROFILE_CALL:
+                    print(f'{step} FN_PROFILE_CALL')
+                    model.profile(args)
+                    print(f'{step} FN_PROFILE_CALL')
+                    socket_write(s, FN_PROFILE_RET, [step])
+
                 elif fn == FN_SAVE_CALL:
                     print(f'{step} FN_SAVE_CALL')
 

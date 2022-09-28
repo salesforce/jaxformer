@@ -312,6 +312,16 @@ class TransformerDecoder:
         return self.state['step'], np.array(loss).mean(), np.array(grad_global_norm).mean().astype(np.float32)
 
 
+    def profile(self, sample):
+
+        jax.profiler.start_trace('profiles')
+        loss = self.train_pjit(self.state, sample['x'], sample['y'])[0]
+        loss.block_until_ready()
+        jax.profiler.stop_trace()
+
+        return self.state['step']
+
+
     def stats(self):
         params_num = hk.data_structures.tree_size(self.state['model'])
         params_size = hk.data_structures.tree_bytes(self.state['model'])
