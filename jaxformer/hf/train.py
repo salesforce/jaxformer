@@ -80,7 +80,7 @@ def create_args(args=argparse.Namespace()):
 
     args.deepspeed_config = DEEPSPEED_CONFIG
 
-    args.data_train_set = 'gs://sfr-tpu-us-east1-research/enijkamp/gptc/datasets/thepile/train/*.tfrecords'
+    args.data_train_set = 'gs://sfr-tpu-us-east1-research/enijkamp/jaxformer/datasets/thepile/train/*.tfrecords'
 
     args.opt_steps_train = 1000
 
