@@ -1,0 +1,53 @@
+{
+    "debug_mock_data": false,
+    "debug_emulate_tpu_on_cpu": false,
+    "debug_run_local": false,
+
+    "tpu_user": "erik.nijkamp",
+    "tpu_version": 4,
+    "tpu_image": "v2-alpha-tpuv4",
+    "tpu_size": 128,
+    "tpu_delete": false,
+    "tpu_spawn": false,
+    "tpu_reserved": false,
+    "tpu_create_env": false,
+    "tpu_name": "sfr-{tpu_user}-tpu-v{tpu_version}-{tpu_size}-{tpu_zone}-2",
+    "tpu_zone": "us-central2-b",
+    "tpu_network": "sf-research-pv-network",
+    "tpu_subnetwork": "sf-research-us-central2",
+    "tpu_worker_port": 10000,
+    "tpu_tags": "tpu-vm",
+    "tpu_internal_ips": true,
+
+    "model_type": "decoder",
+    "model_layers": 33,
+    "model_dim": 4096,
+    "model_head_dim": 256,
+    "model_heads": 16,
+    "model_vocab_size": 51200,
+    "model_pe_rotary_dims": 64,
+    "model_seq_len": 2048,
+
+    "opt_warmup_steps": 3000,
+    "opt_anneal_steps": 300000,
+    "opt_total_steps": 350000,
+    "opt_lr_max": 1.2e-4,
+    "opt_lr_end": 1.2e-5,
+    "opt_weight_decay": 0.1,
+    "opt_clip_by_global_norm": 1.0,
+    "opt_gradient_accumulation_steps": 32,
+    "opt_per_replica_batch": 1,
+    "opt_params_partitions": 1,
+
+    "data_train_set": "gs://sfr-tpu-us-east1-research/enijkamp/gptc/datasets/thepile/train/*.tfrecords",
+
+    "ckpt_dir": "gs://sfr-tpu-us-east1-research/enijkamp/jaxformer/checkpoints/profile_6B_tpu_v4_128",
+    "ckpt_every": 10000,
+    "ckpt_attempt": 0,
+    
+    "wandb_enabled": true,
+    "wandb_project": "jaxformer",
+    "wandb_entity": "enijkamp",
+    "wandb_group": "profile",
+    "wandb_name": "profile_6B_tpu_v4_128"
+}
