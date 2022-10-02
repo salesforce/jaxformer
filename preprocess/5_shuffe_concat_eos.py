@@ -33,7 +33,7 @@ def create_args(args=argparse.Namespace()):
     args.data_bucket_path = '/tmp/dataset_v1/4_create_tf_records'
 
     # TODO(enijkamp): set eos id for tokenizer
-    args.out_eos_value = 2
+    args.out_eos_value = 50256
 
     args.out_seq_len = 2048
     args.out_seq_len_min = 64
