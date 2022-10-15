@@ -1,0 +1,55 @@
+{
+    "debug_mock_data": false,
+    "debug_emulate_tpu_on_cpu": false,
+    "debug_run_local": false,
+
+    "tpu_user": "erik.nijkamp",
+    "tpu_version": 3,
+    "tpu_image": "v2-alpha",
+    "tpu_size": 64,
+    "tpu_delete": true,
+    "tpu_spawn": true,
+    "tpu_reserved": false,
+    "tpu_create_env": true,
+    "tpu_name": "sfr-{tpu_user}-tpu-v{tpu_version}-{tpu_size}-{tpu_zone}-1",
+    "tpu_zone": "us-east1-d",
+    "tpu_worker_port": 10000,
+    "tpu_internal_ips": false,
+    
+    "model_type": "decoder",
+    "model_sharding": "inter",
+    "model_layers": 20,
+    "model_dim": 1024,
+    "model_head_dim": 64,
+    "model_heads": 16,
+    "model_vocab_size": 51200,
+    "model_pe_rotary_dims": 32,
+    "model_seq_len": 2048,
+
+    "opt_warmup_steps": 3000,
+    "opt_anneal_steps": 147000,
+    "opt_total_steps": 150000,
+    "opt_lr_max": 1.8e-4,
+    "opt_lr_end": 3.0e-5,
+    "opt_weight_decay": 0.1,
+    "opt_clip_by_global_norm": 1.0,
+    "opt_gradient_accumulation_steps": 32,
+    "opt_per_replica_batch": 1,
+    "opt_params_partitions": 1,
+
+    "data_train_set": "gs://sfr-tpu-us-east1-research/enijkamp/jaxformer/datasets/bigquery/train/*.tfrecords",
+
+    "restore_reinit": true,
+    "restore_ckpt": "gs://sfr-codegen-research/checkpoints/codegen-350M-nl/",
+    "restore_step": 350000,
+
+    "ckpt_dir": "gs://sfr-tpu-us-east1-research/enijkamp/jaxformer/checkpoints/codegen_350M_multi",
+    "ckpt_every": 20000,
+    "ckpt_attempt": 0,
+
+    "wandb_enabled": true,
+    "wandb_project": "jaxformer",
+    "wandb_entity": "enijkamp",
+    "wandb_group": "350M",
+    "wandb_name": "codegen_350M_multi"
+}

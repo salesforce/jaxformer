@@ -2,11 +2,6 @@
 
 JAX library for training of large language models with data and model parallelism based on the pjit() operator on TPU-v3/v4.
 
-## Models
-
-* CodeGen ([Paper](https://arxiv.org/abs/2203.13474)) ([Code](https://github.com/salesforce/codegen))
-* ProGen2 ([Paper](https://arxiv.org/abs/2206.13517)) ([Code](https://github.com/salesforce/progen/tree/main/progen2))
-
 ## Citation
 
 Please cite:
@@ -21,7 +16,40 @@ Please cite:
 
 Acknowledgments: Ben Wang, James Bradbury, Zak Stone, Bo Pang.
 
-## Setup
+## Models
+
+* CodeGen ([Paper](https://arxiv.org/abs/2203.13474)) ([Code](https://github.com/salesforce/codegen))
+* ProGen2 ([Paper](https://arxiv.org/abs/2206.13517)) ([Code](https://github.com/salesforce/progen/tree/main/progen2))
+
+### CodeGen
+
+```
+gs://sfr-codegen-research/checkpoints/codegen-350M-nl/
+gs://sfr-codegen-research/checkpoints/codegen-350M-multi/
+gs://sfr-codegen-research/checkpoints/codegen-350M-mono/
+```
+
+
+## Sanity
+
+```sh
+import jax
+jax.devices()
+device_count = jax.device_count()
+local_device_count = jax.local_device_count()
+xs = jax.numpy.ones(jax.local_device_count())
+r = jax.pmap(lambda x: jax.lax.psum(x, 'i'), axis_name='i')(xs)
+print('global device count:', jax.device_count())
+print('local device count:', jax.local_device_count())
+print('pmap result:', r)
+
+gcloud compute tpus tpu-vm ssh erik.nijkamp@sfr-erik.nijkamp-tpu-v3-128-us-east1-d-1 --zone=us-east1-d --internal-ip --worker=all --command="pip install 'jax[tpu]==0.3.16' -f https://storage.googleapis.com/jax-releases/libtpu_releases.html"
+gcloud compute tpus tpu-vm scp test.py erik.nijkamp@sfr-erik.nijkamp-tpu-v3-128-us-east1-d-1:/home/erik.nijkamp/ --zone=us-east1-d --internal-ip --worker=all
+gcloud compute tpus tpu-vm ssh erik.nijkamp@sfr-erik.nijkamp-tpu-v3-128-us-east1-d-1 --zone=us-east1-d --internal-ip --worker=all --command="killall -9 python3"
+gcloud compute tpus tpu-vm ssh erik.nijkamp@sfr-erik.nijkamp-tpu-v3-128-us-east1-d-1 --zone=us-east1-d --internal-ip --worker=all --command="source .venv/bin/activate; python3 /home/erik.nijkamp/test.py"
+```
+
+## Training
 
 ### Mode 1: CPU local
 
@@ -104,7 +132,44 @@ python3 -m jaxformer.train --config config/codegen_350M_nl.json
 gcloud compute tpus tpu-vm ssh sfr-erik.nijkamp-tpu-v3-64-us-east1-d-1 --zone us-east1-d --internal-ip --worker=0
 ```
 
-### Mode 4: A100 fine-tune (DeepSpeed)
+
+## Fine-tuning
+
+### TPU fine-tune
+
+```sh
+gcloud beta compute --project=<project> instances create sfr-<username>-cpu-small-us-east1-d-1 --zone=us-east1-d --machine-type=e2-standard-4 --network-tier=PREMIUM --maintenance-policy=MIGRATE --service-account=<account> --scopes=https://www.googleapis.com/auth/devstorage.read_only,https://www.googleapis.com/auth/logging.write,https://www.googleapis.com/auth/monitoring.write,https://www.googleapis.com/auth/servicecontrol,https://www.googleapis.com/auth/service.management.readonly,https://www.googleapis.com/auth/trace.append --image=ubuntu-minimal-2004-focal-v20210720 --image-project=ubuntu-os-cloud --boot-disk-size=50GB --boot-disk-type=pd-balanced --boot-disk-device-name=sfr-cpu-small --no-shielded-secure-boot --shielded-vtpm --shielded-integrity-monitoring --reservation-affinity=any
+
+gcloud beta compute ssh sfr-<username>-cpu-small-us-east1-d-1 --project=<project> --zone=us-east1-d
+
+sudo apt update
+sudo apt install --yes git screen python3.9 python3.9-venv
+
+screen -S codegen_350M_mono
+
+curl https://sdk.cloud.google.com | bash
+source ~/.bashrc
+gcloud init
+ssh-keygen -t rsa -f ~/.ssh/google_compute_engine -N ''
+
+export WANDB_API_KEY=<secret>
+export GOOGLE_APPLICATION_CREDENTIALS=~/.config/gcloud/legacy_credentials/<username>/adc.json
+export GCLOUD_PROJECT=<project>
+
+git clone https://<username>:<secret>@github.com/salesforce/jaxformer.git/
+cd jaxformer
+
+python3.9 -m venv .venv
+source .venv/bin/activate
+pip install --upgrade pip setuptools
+pip install -r requirements.txt
+
+python3 -m jaxformer.train --config config/codegen_350M_multi.json
+
+gcloud compute tpus tpu-vm ssh sfr-erik.nijkamp-tpu-v3-64-us-east1-d-1 --zone us-east1-d --internal-ip --worker=0
+```
+
+### A100 fine-tune (DeepSpeed)
 
 ```sh
 apt install python3.8 python3.8-venv python3.8-dev
@@ -125,25 +190,6 @@ pip install transformers==4.21.1 datasets==1.16.1 deepspeed==0.7.0 tensorflow-cp
 pip install -e .
 
 deepspeed --num_gpus=1 jaxformer/hf/train.py
-```
-
-### Test
-
-```sh
-import jax
-jax.devices()
-device_count = jax.device_count()
-local_device_count = jax.local_device_count()
-xs = jax.numpy.ones(jax.local_device_count())
-r = jax.pmap(lambda x: jax.lax.psum(x, 'i'), axis_name='i')(xs)
-print('global device count:', jax.device_count())
-print('local device count:', jax.local_device_count())
-print('pmap result:', r)
-
-gcloud compute tpus tpu-vm ssh erik.nijkamp@sfr-erik.nijkamp-tpu-v3-128-us-east1-d-1 --zone=us-east1-d --internal-ip --worker=all --command="pip install 'jax[tpu]==0.3.16' -f https://storage.googleapis.com/jax-releases/libtpu_releases.html"
-gcloud compute tpus tpu-vm scp test.py erik.nijkamp@sfr-erik.nijkamp-tpu-v3-128-us-east1-d-1:/home/erik.nijkamp/ --zone=us-east1-d --internal-ip --worker=all
-gcloud compute tpus tpu-vm ssh erik.nijkamp@sfr-erik.nijkamp-tpu-v3-128-us-east1-d-1 --zone=us-east1-d --internal-ip --worker=all --command="killall -9 python3"
-gcloud compute tpus tpu-vm ssh erik.nijkamp@sfr-erik.nijkamp-tpu-v3-128-us-east1-d-1 --zone=us-east1-d --internal-ip --worker=all --command="source .venv/bin/activate; python3 /home/erik.nijkamp/test.py"
 ```
 
 ### Features
