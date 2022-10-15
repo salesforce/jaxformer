@@ -167,7 +167,7 @@ python3 -m jaxformer.train --config config/codegen_350M_multi.json
 gcloud compute tpus tpu-vm ssh sfr-erik.nijkamp-tpu-v3-64-us-east1-d-1 --zone us-east1-d --internal-ip --worker=0
 ```
 
-### A100 fine-tune (DeepSpeed)
+### A100 fine-tune
 
 ```sh
 apt install python3.8 python3.8-venv python3.8-dev
