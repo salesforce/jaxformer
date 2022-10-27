@@ -64,7 +64,8 @@ def yield_ds(args, files):
     def append_eos_fn(sample):
         return tf.pad(sample, paddings=[[0, 1]], mode='CONSTANT', constant_values=args.out_eos_value)
 
-    ds = tf.data.TFRecordDataset(files, num_parallel_reads=len(files))
+    # ds = tf.data.TFRecordDataset(files, num_parallel_reads=len(files))
+    ds = tf.data.TFRecordDataset(files, num_parallel_reads=args.n_workers)
     ds = ds.shuffle(buffer_size=1024*64, seed=args.seed)
     ds = ds.map(parse_fn)
     # ds = ds.map(append_bos_fn)
