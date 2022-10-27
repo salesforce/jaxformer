@@ -23,10 +23,28 @@ Acknowledgments: Ben Wang, James Bradbury, Zak Stone, Bo Pang.
 
 ### CodeGen
 
+`350M`
+
 ```
 gs://sfr-codegen-research/checkpoints/codegen-350M-nl/350000
 gs://sfr-codegen-research/checkpoints/codegen-350M-multi/150000
 gs://sfr-codegen-research/checkpoints/codegen-350M-mono/150000
+```
+
+`2B`
+
+```
+gs://sfr-codegen-research/checkpoints/codegen-2B-nl/350000
+gs://sfr-codegen-research/checkpoints/codegen-2B-multi/150000
+gs://sfr-codegen-research/checkpoints/codegen-2B-mono/100000
+```
+
+`6B`
+
+```
+gs://sfr-codegen-research/checkpoints/codegen-6B-nl/350000
+gs://sfr-codegen-research/checkpoints/codegen-6B-multi/100000
+gs://sfr-codegen-research/checkpoints/codegen-6B-mono/140000
 ```
 
 ## Sanity TPU
