@@ -208,7 +208,12 @@ pip install -e .
 deepspeed --num_gpus=1 jaxformer/hf/train.py
 ```
 
-### Features
+## Conversion
+```
+python3 -m jaxformer.hf.convert --config=config/codegen_1B_mono.json --step=150000
+```
+
+## Features
 
 v1
 - Data
