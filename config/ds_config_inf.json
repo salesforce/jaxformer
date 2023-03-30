@@ -1,0 +1,21 @@
+{
+    "fp16": {
+        "enabled": true
+    },
+    "bf16": {
+        "enabled": false
+    },
+    "zero_optimization": {
+        "stage": 3,
+        "offload_param": {
+            "device": "none",
+            "pin_memory": true,
+            "max_in_cpu": 1e5
+        },
+        "overlap_comm": true,
+        "contiguous_gradients": true
+    },
+    "steps_per_print": 2000,
+    "train_micro_batch_size_per_gpu": 1,
+    "wall_clock_breakdown": false
+}
