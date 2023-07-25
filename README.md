@@ -6,10 +6,10 @@ JAX library for training of large language models with data and model parallelis
 
 Please cite:
 ```bibtex
-@article{Jaxformer,
+@misc{Jaxformer,
   title={Jaxformer: A minimal library for training LLMs on TPU},
   author={Nijkamp, Erik},
-  journal={arXiv},
+  howpublished = {\url{https://github.com/salesforce/jaxformer}},
   year={2022}
 }
 ```
