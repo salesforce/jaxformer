@@ -2,4 +2,4 @@ tokenizers==0.10.3
 tensorflow==2.7.2
 google-cloud-storage==1.39.0
 smart_open[gcs]==5.2.1
-transformers==4.9.2
+transformers==4.36.0
